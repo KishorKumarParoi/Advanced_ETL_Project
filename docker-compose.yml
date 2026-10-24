@@ -1,0 +1,16 @@
+services:
+  api:
+    build: .
+    image: advanced-etl-ml:latest
+    container_name: advanced-etl-serving
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+    mem_limit: 1024m
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
