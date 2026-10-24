@@ -1,9 +1,12 @@
 # 🛡️ Advanced Network Security ETL & Distributed ML Pipeline Platform
 
+[![Architecture Flow](docs/images/01_architecture_flow.svg)](docs/images/01_architecture_flow.svg)
+
 [![Python 3.12](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![MongoDB Atlas](https://img.shields.io/badge/MongoDB-Atlas%20Distributed-47A248?logo=mongodb&logoColor=white)](https://www.mongodb.com/atlas)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![Docker Compose](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
+[![Architecture Blueprint](https://img.shields.io/badge/Architecture-Enterprise_Blueprint-blue)](ARCHITECTURE.md)
 
 > **A scalable, production-grade 4-Stage ETL and Machine Learning Pipeline for real-time network traffic packet inspection and intrusion detection.** Features **MongoDB Atlas distributed batch streaming**, modular **data validation**, robust **KNN imputation & RobustScaler transformations**, multi-model benchmarking (**XGBoost, CatBoost, Random Forest** with 98.4% detection accuracy), and sub-4ms **FastAPI ONNX inference serving**.
 
