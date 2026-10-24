@@ -17,49 +17,55 @@ curl -fsSL https://raw.githubusercontent.com/KishorKumarParoi/Advanced_ETL_Proje
 
 ---
 
-## 🏛️ System Architecture
+---
 
+## 🏛️ System Architecture & Production Workflow
+
+![Production Workflow Architecture](docs/images/step_by_step_production_workflow.png)
+
+> 📘 **Detailed Architectural Deep-Dive**: For end-to-end execution details across ADF, Databricks, ADLS Gen2, Synapse CETAS, and ML Serving, see [docs/PRODUCTION_WORKFLOW.md](docs/PRODUCTION_WORKFLOW.md).
+
+### 📐 End-to-End Enterprise Lakehouse Architecture
+
+Below is the verified architecture connecting multi-source ingestion, cloud data lake tiers, cross-database enrichment, and analytical serving:
+
+![System Architecture Blueprint](docs/images/architecture_diagram.png)
+
+```mermaid
+flowchart LR
+    A["Data Sources<br/>(HTTP / SQL / Mongo)"] --> B["Azure Data Factory<br/>(Dynamic Ingestion)"]
+    B --> C["ADLS Gen2 Bronze<br/>(Raw Landing)"]
+    C --> D["Azure Databricks<br/>(Spark Transformation)"]
+    M[("MongoDB Atlas<br/>(Enrichment)")] --> D
+    D --> E["ADLS Gen2 Gold<br/>(Curated Parquet)"]
+    E --> F["Azure Synapse<br/>(CETAS Serverless)"]
+    F --> G["Power BI / Tableau"]
+    E --> H["FastAPI ML Pipeline<br/>(Sub-4ms Inference)"]
 ```
-[Network Traffic Logs]
-        │
-        ▼
-┌────────────────────────────────────────┐
-│ 1. DATA INGESTION (MongoDB Atlas)      │
-│    500K+ records/min with schema norm │
-└──────────────────┬─────────────────────┘
-                   │
-                   ▼
-┌────────────────────────────────────────┐
-│ 2. DATA VALIDATION                     │
-│    Schema drift detection & null trap  │
-└──────────────────┬─────────────────────┘
-                   │
-                   ▼
-┌────────────────────────────────────────┐
-│ 3. DATA TRANSFORMATION                 │
-│    KNN Imputation & RobustScaler       │
-└──────────────────┬─────────────────────┘
-                   │
-                   ▼
-┌────────────────────────────────────────┐
-│ 4. MODEL BENCHMARK & SERVING           │
-│    XGBoost / CatBoost / Random Forest  │
-│    FastAPI Sub-4ms Inference Serving   │
-└────────────────────────────────────────┘
-```
+
+---
+
+## 📸 Step-by-Step Production Components
+
+| Stage | Component | Screenshot & Description |
+|---|---|---|
+| **1. Dynamic Ingestion** | **Azure Data Factory** | ![ADF Ingestion Pipeline](docs/images/adf_pipeline_ingestion.png)<br/>*Automated parallel batch ingestion with dynamic lookup, loops, and SQL/HTTP connectors.* |
+| **2. Distributed ETL** | **Azure Databricks** | ![Databricks Spark Processing](docs/images/databricks_transformation.png)<br/>*OAuth 2.0 ADLS Gen2 connectivity, MongoDB Atlas data enrichment, and PySpark transformations.* |
+| **3. Analytical Serving** | **Azure Synapse Analytics** | ![Synapse Serverless CETAS](docs/images/synapse_gold_cetas.png)<br/>*Managed Identity scoped credentials, Parquet Snappy formatting, and CETAS Gold layer materialization.* |
+| **4. Architectural Decisions** | **Cloud Database Framework** | ![Database Decision Tree](docs/images/database_decision_matrix.png)<br/>*Strategic selection matrix across latency, throughput, relational ACID, and document storage.* |
 
 ---
 
 ## 🚀 Execution Commands
 
 ```bash
-# Run 4-stage pipeline
-python main.py
-
 # Push data to MongoDB Atlas
 python push_data.py
 
-# Run API
+# Run 4-stage pipeline (Ingestion -> Validation -> Transformation -> Model Trainer)
+python main.py
+
+# Run FastAPI sub-4ms inference API
 python app.py
 ```
 
@@ -81,3 +87,4 @@ curl -fsSL https://raw.githubusercontent.com/KishorKumarParoi/Advanced_ETL_Proje
 ```bash
 ./clear.sh
 ```
+
